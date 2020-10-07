@@ -3,10 +3,12 @@ import Header from "../header/header";
 import Main from "../main/main";
 import TaskList from "../taskList/taskList";
 import Task from "../tasks.json";
+import Tabs from "../tab/tab";
 
 class App extends Component {
   state = {
-    tasks: Task
+    tasks: Task,
+    filter:false
   };
 
   add = (value, value1, id) => {
@@ -21,7 +23,8 @@ class App extends Component {
 
   changeStatus = (id,name) => {
     const { tasks = [] } = this.state;
-    tasks.some((el) => {
+    // eslint-disable-next-line array-callback-return
+    tasks.some((el )=> {
       if (el._id === id) 
         el[name] = !el[name] 
     });
@@ -41,30 +44,33 @@ const newArr=[
 this.setState({tasks:newArr})
   }
 
+  filterFunc=(type)=>{
+  let filter=false;
+  if(filter!=="all") filter=type;
+  this.setState({filter})
+  }
+
+  useTabs=(tasks,filter)=>{
+    if(!filter || filter==="all") return tasks;
+    const newlist=tasks.filter(el=>
+    {return el[filter]})
+
+    return newlist
+  }
+
   render() {
-    const { tasks } = this.state;
+    const { tasks,filter } = this.state;
     const newCount = tasks.length;
+    const tab=this.useTabs(tasks,filter)
+   
     return (
       <div className={"wrap"}>
         <Header count={newCount} />
         <Main add={this.add} />
         <div className={"container-tasks"}>
-          <div className={"task-btn-container"}>
-            <button
-              className={"tab-btn btn-all-tasks btn-active"}
-              data-tab="all"
-            >
-              All tasks
-            </button>
-            <button
-              className={"tab-btn btn-incomplite-tasks"}
-              data-tab="completed"
-            >
-              Incomplited tasks
-            </button>
-          </div>
+          <Tabs filterFunc={this.filterFunc} filter={filter}/>
           <ul className={"task-container"}>
-            <TaskList tasks={tasks} changeStatus={this.changeStatus} remove={this.remove}/>
+            <TaskList tasks={tab} changeStatus={this.changeStatus} remove={this.remove}/>
           </ul>
         </div>
       </div>
