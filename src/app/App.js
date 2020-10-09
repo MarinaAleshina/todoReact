@@ -10,6 +10,7 @@ class App extends Component {
   state = {
     tasks: Task,
     filter: false,
+    showMenu: false,
   };
 
   add = (value, value1, id) => {
@@ -60,27 +61,40 @@ class App extends Component {
     return newlist;
   };
 
+  showMenu = () => {
+    this.setState({
+      showMenu: !this.state.showMenu,
+    });
+  };
   render() {
-    const { tasks, filter } = this.state;
+    const { tasks, filter, showMenu } = this.state;
     const newCount = tasks.length;
     const tab = this.useTabs(tasks, filter);
 
     return (
       <div className={"wrap"}>
-        <div className="modal">
-          <Header count={newCount} />
-          <Main add={this.add} />
-          <div className={"container-tasks"}>
-            <Tabs filterFunc={this.filterFunc} filter={filter} />
-            <ul className={"task-container"}>
-              <TaskList
-                tasks={tab}
-                changeStatus={this.changeStatus}
-                remove={this.remove}
-              />
-            </ul>
-          </div>
-          <button className={"menu-button"}>show menu</button>
+        <div className={`main-modal ${showMenu ? "active" : ""}`}>
+          Main menu
+        </div>
+        <Header count={newCount} />
+        <Main add={this.add} />
+        <div className={"container-tasks"}>
+          <Tabs filterFunc={this.filterFunc} filter={filter} />
+          <ul className={"task-container"}>
+            <TaskList
+              tasks={tab}
+              changeStatus={this.changeStatus}
+              remove={this.remove}
+            />
+          </ul>
+          <button
+            className={"menu-button"}
+            onClick={() => {
+              this.showMenu();
+            }}
+          >
+            show menu
+          </button>
         </div>
       </div>
     );
