@@ -190,3 +190,19 @@ button {
 .js-hidden {
   display: none;
 }
+
+.menu-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.modal {
+  height: 100vh;
+  width: 500px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ff0000;
+}
